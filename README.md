@@ -17,7 +17,7 @@ widgetario/
 ├── part5-production/         # Liveness/Readiness probes, resource limits, secrets, limits
 ├── part6-monitoring/         # Grafana, Prometheus setup
 ├── part7-efk-logging/        # Elasticsearch, Fluent Bit, Kibana stack
-├── dashboards/               # Grafana JSON dashboards
+├── dashboards/               # Grafana, Prometheus an Kibana dashboards
 ├── tests/                    # Testing scripts and test cases
 ├── README.md                 # Project overview and documentation
 └── deploy.sh                 # Optional deployment script
