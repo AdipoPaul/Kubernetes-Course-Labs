@@ -18,7 +18,6 @@ widgetario/
 ├── part6-monitoring/         # Grafana, Prometheus setup
 ├── part7-efk-logging/        # Elasticsearch, Fluent Bit, Kibana stack
 ├── dashboards/               # Grafana JSON dashboards
-├── images/                   # Diagrams and architecture images (optional)
 ├── tests/                    # Testing scripts and test cases
 ├── README.md                 # Project overview and documentation
 └── deploy.sh                 # Optional deployment script
