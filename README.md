@@ -37,10 +37,10 @@ Deploys the following components:
 ### Commands:
 
 ```bash
-kubectl apply -f part1-core-apps/products-db \
-  -f hackathon/solution-part-1/products-api \
-  -f hackathon/solution-part-1/stock-api \
-  -f hackathon/solution-part-1/web
+kubectl apply -f part1-core-apps/products-db 
+  -f part1-core-apps/products-api 
+  -f part1-core-apps/stock-api 
+  -fpart1-core-apps/web
 ```
 
 ---
@@ -57,7 +57,7 @@ In this phase, we:
 ### Commands:
 
 ```bash
-kubectl apply -f part2-configure-apps/
+kubectl apply -f part2-configure-apps/products-db -f part2-configure-apps/products-api  -f part2-configure-apps/stock-api -f part2-configure-apps/web
 ```
 
 ---
@@ -111,6 +111,7 @@ This phase configures:
 
 ```bash
 kubectl apply -f part5-production/
+              -f ...
 ```
 
 ---
@@ -137,6 +138,7 @@ Login:
 
 ```bash
 kubectl apply -f part6-monitoring/
+              -f ...
 ```
 
 Import dashboards via UI or `dashboards/` folder.
@@ -161,6 +163,7 @@ minikube service kibana-np -n logging --url
 
 ```bash
 kubectl apply -f part7-efk-logging/
+              -f ...
 ```
 
 ---
