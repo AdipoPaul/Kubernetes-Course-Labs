@@ -103,7 +103,6 @@ This phase configures:
 * Liveness and readiness probes
 * CPU and memory resource requests and limits
 * Secrets for DB passwords and API keys
-* Multi-container deployments if applicable
 
 ### Commands:
 
