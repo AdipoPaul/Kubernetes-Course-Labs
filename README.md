@@ -1,183 +1,232 @@
-# Widgetario Kubernetes Hackathon Project
+# Widgetario: Kubernetes Application Deployment & Observability
 
-Welcome to the **Widgetario** project, a Kubernetes-based microservices application built and deployed as part of a hands-on hackathon. This project spans multiple stages including configuration, storage, ingress, production hardening, observability, and CI/CD using popular cloud-native tools.
+## Overview
+
+Widgetario is a sample multi-component application designed to demonstrate key concepts of Kubernetes including deployment, configuration, networking, storage, observability, and CI/CD. The application simulates a product management system with a frontend, APIs, and databases. This repository documents each part of the deployment pipeline and observability stack, providing insights into how to operationalize a cloud-native application.
 
 ---
 
-## 📦 Part 1: Core App Setup
+## Repository Structure
 
-### Objective
+```
+widgetario/
+├── part1-core-apps/          # Deployments for databases and APIs
+├── part2-configure-apps/     # Secrets, ConfigMaps, probes, and environment variables
+├── part3-storage/            # Persistent Volume and VolumeClaim setups
+├── part4-ingress/            # Ingress setup for local DNS access
+├── part5-production/         # Liveness/Readiness probes, resource limits, secrets, limits
+├── part6-monitoring/         # Grafana, Prometheus setup
+├── part7-efk-logging/        # Elasticsearch, Fluent Bit, Kibana stack
+├── dashboards/               # Grafana JSON dashboards
+├── images/                   # Diagrams and architecture images (optional)
+├── tests/                    # Testing scripts and test cases
+├── README.md                 # Project overview and documentation
+└── deploy.sh                 # Optional deployment script
+```
 
-Deploy the core components of Widgetario:
+---
 
-* Products API
-* Stock API
-* PostgreSQL database
+## Part 1: Core App Deployment
 
-### Tools & Features
+Deploys the following components:
 
-* Kubernetes YAML files
-* StatefulSet for PostgreSQL
-* Secrets for database credentials
-* Deployments and Services for APIs
+* `products-db`: A PostgreSQL database
+* `products-api`: Backend API to manage product data
+* `stock-api`: Backend API for stock management
+* `web`: A Node.js frontend served via Nginx
 
-### Key Commands
+### Commands:
 
 ```bash
-kubectl apply -k k8s/core
+kubectl apply -f part1-core-apps/
 ```
 
-### Result
-
-All core services were successfully deployed in a dedicated namespace.
-
 ---
 
-## 🌐 Part 2: Ingress Setup
+## Part 2: Configure Apps
 
-### Objective
+In this phase, we:
 
-Expose the APIs and the Web frontend using Kubernetes Ingress.
+* Use `ConfigMaps` for environment variables
+* Use `Secrets` for sensitive data
+* Configure liveness and readiness probes
+* Inject configuration using the Kubernetes Downward API
 
-### Tools Used
-
-* NGINX Ingress Controller
-* Custom Ingress Resources
-* NodePort & LoadBalancer services for testing
-
-### Steps
-
-1. Install ingress-nginx using kubectl manifests
-2. Configure DNS entries locally (`/etc/hosts`)
-3. Access services via `http://widgetario.local`
-
----
-
-## ⚙️ Part 3: Web Frontend Deployment
-
-### Objective
-
-Deploy the user-facing frontend for Widgetario.
-
-### Features
-
-* ConfigMap for feature flags
-* Service and Deployment for the web UI
-* Internal communication with APIs via services
-
-### Steps
+### Commands:
 
 ```bash
-kubectl apply -k k8s/web
+kubectl apply -f part2-configure-apps/
 ```
 
-### Verification
-
-Accessible via browser through Ingress (`widgetario.local`).
-
 ---
 
-## 🔐 Part 4: Production Hardening
+## Part 3: Storage
 
-### Objective
+This section provisions persistent storage for `products-db` using:
 
-Secure and stabilize the application stack.
+* `PersistentVolume`
+* `PersistentVolumeClaim`
+* `StatefulSet` for `products-db`
 
-### Features Implemented
-
-* Readiness and liveness probes
-* Resource limits (CPU/memory)
-* HTTPS setup with secrets
-* Password encryption for all APIs
-
-### Result
-
-Resilience, security, and stability improvements in all deployed services.
-
----
-
-## 📊 Part 5: Monitoring with Grafana & Prometheus
-
-### Objective
-
-Enable observability using Prometheus and Grafana.
-
-### Steps
-
-1. Deploy Prometheus and Grafana using manifests
-2. Create `grafana-creds` secret for login
-3. Access Grafana: `http://<minikube-ip>:30003`
-
-### Metrics Covered
-
-* Cluster health
-* Pod resource usage
-* Service availability
-
----
-
-## 📁 Part 6: Logging with EFK Stack (Elasticsearch, Fluent Bit, Kibana)
-
-### Objective
-
-Centralize logging for debugging and analytics.
-
-### Components
-
-* Elasticsearch for storage
-* Fluent Bit for log shipping
-* Kibana for visualization
-
-### Access Kibana
-
-```
-http://<minikube-ip>:30005
-```
-
-### Logs Captured
-
-* Application stdout/stderr
-* Kubernetes events
-* Container logs
-
----
-
-## 🔄 Part 7: CI/CD with Jenkins and Gogs
-
-### Objective
-
-Automate builds and deployments using Jenkins and a Gogs Git server.
-
-### Steps
-
-1. Deploy Gogs:
+### Commands:
 
 ```bash
-kubectl apply -k k8s/ci/gogs
+kubectl apply -f part3-storage/
 ```
 
-2. Setup Git user and repo in Gogs
-3. Deploy Jenkins:
+---
+
+## Part 4: Ingress
+
+Enables access via `http://widgetario.local` instead of `NodePort`. Ingress controller setup includes:
+
+* Deploying NGINX Ingress Controller
+* Creating an Ingress resource for the frontend
+
+### Commands:
 
 ```bash
-kubectl apply -k k8s/ci/jenkins
+kubectl apply -f part4-ingress/
 ```
 
-4. Configure Jenkins pipelines to pull code from Gogs
-5. Auto-deploy on push via Git webhook
+Update local `/etc/hosts` with:
+
+```
+127.0.0.1 widgetario.local
+```
 
 ---
 
-## 🚀 Conclusion
+## Part 5: Productionizing
 
-This project demonstrates the full lifecycle of building, deploying, monitoring, and automating a microservices-based application in Kubernetes. Each part is modular and can be scaled or adapted to real-world production needs.
+This phase configures:
+
+* Liveness and readiness probes
+* CPU and memory resource requests and limits
+* Secrets for DB passwords and API keys
+* Multi-container deployments if applicable
+
+### Commands:
+
+```bash
+kubectl apply -f part5-production/
+```
 
 ---
 
-## 🧾 Authors
+## Part 6: Monitoring (Prometheus + Grafana)
 
-* DevOps Team Widgetario
+Deploy monitoring tools under the `monitoring` namespace:
 
-## 📜 License
+* Prometheus: Metric collection and scraping
+* Grafana: Visual dashboards using imported JSON templates
 
-MIT
+### Access:
+
+```bash
+minikube service grafana-np -n monitoring --url
+```
+
+Login:
+
+* **User**: `admin`
+* **Password**: `labs` (set via `grafana-creds` secret)
+
+### Commands:
+
+```bash
+kubectl apply -f part6-monitoring/
+```
+
+Import dashboards via UI or `dashboards/` folder.
+
+---
+
+## Part 7: Logging (EFK Stack)
+
+Install Elasticsearch, Fluent Bit, and Kibana under the `logging` namespace:
+
+* **Elasticsearch**: Log storage
+* **Fluent Bit**: Log collector
+* **Kibana**: Visualization tool
+
+### Access Kibana:
+
+```bash
+minikube service kibana-np -n logging --url
+```
+
+### Commands:
+
+```bash
+kubectl apply -f part7-efk-logging/
+```
+
+---
+
+## Installation & Deployment
+
+Ensure Minikube is installed and started.
+
+```bash
+minikube start
+```
+
+Apply each part sequentially:
+
+```bash
+kubectl apply -f part1-core-apps/
+kubectl apply -f part2-configure-apps/
+...
+kubectl apply -f part7-efk-logging/
+```
+
+Optionally, use `deploy.sh` to automate the sequence.
+
+---
+
+## Testing
+
+Tests are stored under `tests/` and include curl commands or automation scripts:
+
+```bash
+curl http://widgetario.local/api/products
+curl http://widgetario.local/api/stock
+```
+
+To run unit tests for services:
+
+```bash
+cd tests/
+npm test  # or appropriate framework
+```
+
+---
+
+## Dependencies
+
+* Minikube
+* kubectl
+* Node.js / PostgreSQL
+* Prometheus, Grafana
+* Elasticsearch, Fluent Bit, Kibana
+
+---
+
+## Contribution Guidelines
+
+Feel free to fork and open a pull request. This repo is structured for educational and hackathon demonstration purposes.
+
+---
+
+## License
+
+MIT License
+
+---
+
+## Author
+
+\[Adipo] – Kubernetes Hackathon 2025
+
+For any issues, please create an issue on GitHub or email the maintainer.
