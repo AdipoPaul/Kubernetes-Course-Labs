@@ -37,7 +37,10 @@ Deploys the following components:
 ### Commands:
 
 ```bash
-kubectl apply -f part1-core-apps/
+kubectl apply -f part1-core-apps/products-db \
+  -f hackathon/solution-part-1/products-api \
+  -f hackathon/solution-part-1/stock-api \
+  -f hackathon/solution-part-1/web
 ```
 
 ---
