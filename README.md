@@ -198,13 +198,6 @@ curl http://widgetario.local/api/products
 curl http://widgetario.local/api/stock
 ```
 
-To run unit tests for services:
-
-```bash
-cd tests/
-npm test  # or appropriate framework
-```
-
 ---
 
 ## Dependencies
