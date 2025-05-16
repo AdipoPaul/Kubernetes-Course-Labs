@@ -216,15 +216,3 @@ npm test  # or appropriate framework
 Feel free to fork and open a pull request. This repo is structured for educational and hackathon demonstration purposes.
 
 ---
-
-## License
-
-MIT License
-
----
-
-## Author
-
-\[Adipo] – Kubernetes Hackathon 2025
-
-For any issues, please create an issue on GitHub or email the maintainer.
